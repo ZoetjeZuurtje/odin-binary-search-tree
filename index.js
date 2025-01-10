@@ -68,9 +68,12 @@ class BinarySearchTree {
     this.root = this.returnBinarySearchTree(sortedArray, 0, sortedArray.length - 1)
   }
 
-  find = (num) => this.root.find(num)
-  append = (num) => this.root.append(num)
-  delete = (num) => this.root.findAndDeleteNode(num)
+  // exists = (num) => this.root._seekNode(num) !== null // Returns true if a node with a given number exists, and false otherwise.
+  find = (num) => this.root._seekNode(num)  // Returns the node with the specified number, or null if it does not exist.
+  append = (num) => this.root.append(num) // Adds a node to the tree, in the correct place.
+  delete = (num) => this.root.findAndDeleteNode(num) // Safely removes a node from the tree, keeping the structure intact
+  depth = (num) => this.root._seekNode(num, true) // Returns the depth of the specified node, or -1 if it does not exist
+  height = (num) => this.root._seekNode(num)?.height() ?? -1 // Returns the height of the specified node, or -1 if it does not exist
 
   inOrder (fun) {
     if (typeof fun !== 'function') throw new Error('Argument must be a function')
@@ -168,10 +171,12 @@ class BSTNode {
     this.right?.inOrder(fun)
   }
 
-  find (num) {
-    if (num === this.data) return this
+  // if `returnSteps` is false, returns the node if found and null if the node does not exist
+  // if `returnSteps` is true, returns the depth of node instead, or null if node does not exist
+  _seekNode (num, returnSteps = false, steps = 0) {
+    if (num === this.data) return returnSteps ? steps : this
     const side = num < this.data ? 'left' : 'right'
-    return this[side]?.find(num) ?? null // Return the node if found, or return null if it does not exist
+    return returnSteps ? steps : this[side]?._seekNode(num, returnSteps, steps + 1) ?? null
   }
 
   findAndDeleteNode (num) {
@@ -246,9 +251,6 @@ function generateRandomArray (size) {
 const array = generateRandomArray(20)
 const searchTree = new BinarySearchTree(array)
 // const node128 = searchTree.find(256)
-searchTree.inOrder((node) => {
-  if (node.data === 11) {
-    console.log(node.height())
-  }
-})
+console.log(searchTree.height(25))
+console.log(searchTree.find(2))
 searchTree.print()
