@@ -72,6 +72,12 @@ class BinarySearchTree {
   append = (num) => this.root.append(num)
   delete = (num) => this.root.findAndDeleteNode(num)
 
+  inOrder (fun) {
+    if (typeof fun !== 'function') throw new Error('Argument must be a function')
+
+    this.root.inOrder(fun)
+  }
+
   levelOrder (fun, useRecursion = true) {
     if (typeof fun !== 'function') throw new Error('Argument must be a function')
 
@@ -141,6 +147,13 @@ class BSTNode {
     this.data = num
     this.left = null
     this.right = null
+  }
+
+  inOrder(fun) {
+    fun(this)
+    
+    this.left?.inOrder(fun)
+    this.right?.inOrder(fun)
   }
 
   find (num) {
@@ -221,5 +234,5 @@ function generateRandomArray (size) {
 const array = generateRandomArray(20)
 const searchTree = new BinarySearchTree(array)
 // const node128 = searchTree.find(256)
-searchTree.levelOrder((node) => console.log(node.data), false)
+searchTree.inOrder((node) => console.log(node.data), false)
 searchTree.print()
