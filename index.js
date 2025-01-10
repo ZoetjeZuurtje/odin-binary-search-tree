@@ -149,9 +149,21 @@ class BSTNode {
     this.right = null
   }
 
-  inOrder(fun) {
+  height (accumulator = 0) {
+    if (this.numChildNodes() === 0) {
+      return accumulator
+    }
+
+    const leftNodeHeight = this.left?.height(accumulator + 1) ?? 0
+    const rightNodeHeight = this.right?.height(accumulator + 1) ?? 0
+    const totalHeight = Math.max(leftNodeHeight, rightNodeHeight)
+
+    return totalHeight
+  }
+
+  inOrder (fun) {
     fun(this)
-    
+
     this.left?.inOrder(fun)
     this.right?.inOrder(fun)
   }
@@ -234,5 +246,9 @@ function generateRandomArray (size) {
 const array = generateRandomArray(20)
 const searchTree = new BinarySearchTree(array)
 // const node128 = searchTree.find(256)
-searchTree.inOrder((node) => console.log(node.data), false)
+searchTree.inOrder((node) => {
+  if (node.data === 11) {
+    console.log(node.height())
+  }
+})
 searchTree.print()
