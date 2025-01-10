@@ -76,6 +76,14 @@ class BinarySearchTree {
   height = (num) => this.root._seekNode(num)?.height() ?? -1 // Returns the height of the specified node, or -1 if it does not exist
   isBalanced = () => this.root.isBalanced()
 
+  rebalance () {
+    const array = []
+    this.root.inOrder((node) => array.push(node.data))
+
+    const sortedArray = array.sort((a, b) => a - b)
+    this.root = this.returnBinarySearchTree(sortedArray, 0, sortedArray.length - 1)
+  }
+
   inOrder (fun) {
     if (typeof fun !== 'function') throw new Error('Argument must be a function')
 
@@ -269,12 +277,15 @@ function generateRandomArray (size) {
   return array
 }
 
-const array = generateRandomArray(20)
+const array = generateRandomArray(10)
 const searchTree = new BinarySearchTree(array)
 // const node128 = searchTree.find(256)
 console.log(searchTree.isBalanced())
+
 searchTree.append(30)
 searchTree.append(40)
 searchTree.append(50)
 console.log(searchTree.isBalanced())
+searchTree.print()
+searchTree.rebalance()
 searchTree.print()
