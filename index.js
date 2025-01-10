@@ -121,7 +121,7 @@ class BinarySearchTree {
     if (currentNode.left !== null) queue.push(currentNode.left)
     if (currentNode.right !== null) queue.push(currentNode.right)
 
-    this._levelOrder(fun, queue)
+    this._levelOrderRecursive(fun, queue)
   }
 
   // traverses the tree using a `while` loop
@@ -149,6 +149,7 @@ class BinarySearchTree {
     return root
   }
 
+  // Courtesy of The Odin Project. Thanks!
   print (node = this.root, prefix = '', isLeft = true) {
     if (node === null) {
       return
@@ -286,18 +287,49 @@ class BSTNode {
   }
 }
 
-function generateRandomArray (size) {
+function generateRandomArray (size, min = 0, max = Number.MAX_SAFE_INTEGER) {
   const array = []
 
   for (let i = 0; i < size; i++) {
-    const num = Math.floor(Math.random() * 100)
+    const num = Math.floor(Math.random() * (max - min)) + min
     // const num = i
     array.push(num)
   }
   return array
 }
 
-const array = generateRandomArray(10)
-const searchTree = new BinarySearchTree(array)
-searchTree.print()
-searchTree.postOrder((node) => console.log(node.data))
+function printAllInEveryOrder (tree) {
+  let array = []
+  tree.inOrder((node) => array.push(node.data))
+  console.log(`inOrder: ${array}`)
+  array = []
+  tree.postOrder((node) => array.push(node.data))
+  console.log(`postOrder: ${array}`)
+  array = []
+  tree.preOrder((node) => array.push(node.data))
+  console.log(`preOrder: ${array}`)
+  array = []
+  tree.levelOrder((node) => array.push(node.data))
+  console.log(`levelOrder: ${array}`)
+}
+
+let array = generateRandomArray(5, 0, 100) // Create an array filled with random ints between 0 and 100
+const searchTree = new BinarySearchTree(array) // Sprout the Tree
+
+// Check if the tree is balanced
+console.log(`searchTree.isBalanced() -> ${searchTree.isBalanced()}`)
+
+// Print out the elements in order - *every* order
+printAllInEveryOrder(searchTree)
+
+// Time to Grow the Tree! Generate a new array with numbers >100, and add the elements!
+array = generateRandomArray(10, 100, 200)
+array.forEach(element => searchTree.append(element))
+
+// Check if the tree is imbalanced, then rebalance it and check again
+console.log(`searchTree.isBalanced() -> ${searchTree.isBalanced()}`)
+searchTree.rebalance()
+console.log(`searchTree.isBalanced() -> ${searchTree.isBalanced()}`)
+
+// Finally, print out everything again
+printAllInEveryOrder(searchTree)
