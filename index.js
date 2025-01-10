@@ -69,11 +69,12 @@ class BinarySearchTree {
   }
 
   exists = (num) => this.root._seekNode(num) !== null // Returns true if a node with a given number exists, and false otherwise.
-  find = (num) => this.root._seekNode(num)  // Returns the node with the specified number, or null if it does not exist.
+  find = (num) => this.root._seekNode(num) // Returns the node with the specified number, or null if it does not exist.
   append = (num) => this.root.append(num) // Adds a node to the tree, in the correct place.
   delete = (num) => this.root.findAndDeleteNode(num) // Safely removes a node from the tree, keeping the structure intact
   depth = (num) => this.root._seekNode(num, true) // Returns the depth of the specified node, or -1 if it does not exist
   height = (num) => this.root._seekNode(num)?.height() ?? -1 // Returns the height of the specified node, or -1 if it does not exist
+  isBalanced = () => this.root.isBalanced()
 
   inOrder (fun) {
     if (typeof fun !== 'function') throw new Error('Argument must be a function')
@@ -235,6 +236,26 @@ class BSTNode {
     if (this.right !== null) childNodes++
     return childNodes
   }
+
+  isBalanced () {
+    const leftHeight = this.left?.height() ?? 0
+    const rightHeight = this.right?.height() ?? 0
+    const heightDifference = Math.abs(leftHeight - rightHeight)
+
+    if (this.numChildNodes() === 2) {
+      return this.left.isBalanced() && this.right.isBalanced() && heightDifference < 2
+    }
+
+    if (this.numChildNodes() === 1) {
+      if (this.left !== null) {
+        return this.left.isBalanced() && heightDifference < 2
+      } else {
+        return this.right.isBalanced() && heightDifference < 2
+      }
+    }
+
+    return heightDifference < 2
+  }
 }
 
 function generateRandomArray (size) {
@@ -251,6 +272,9 @@ function generateRandomArray (size) {
 const array = generateRandomArray(20)
 const searchTree = new BinarySearchTree(array)
 // const node128 = searchTree.find(256)
-console.log(searchTree.height(25))
-console.log(searchTree.find(2))
+console.log(searchTree.isBalanced())
+searchTree.append(30)
+searchTree.append(40)
+searchTree.append(50)
+console.log(searchTree.isBalanced())
 searchTree.print()
