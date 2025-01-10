@@ -68,7 +68,7 @@ class BinarySearchTree {
     this.root = this.returnBinarySearchTree(sortedArray, 0, sortedArray.length - 1)
   }
 
-  // exists = (num) => this.root._seekNode(num) !== null // Returns true if a node with a given number exists, and false otherwise.
+  exists = (num) => this.root._seekNode(num) !== null // Returns true if a node with a given number exists, and false otherwise.
   find = (num) => this.root._seekNode(num)  // Returns the node with the specified number, or null if it does not exist.
   append = (num) => this.root.append(num) // Adds a node to the tree, in the correct place.
   delete = (num) => this.root.findAndDeleteNode(num) // Safely removes a node from the tree, keeping the structure intact
