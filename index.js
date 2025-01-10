@@ -86,8 +86,17 @@ class BinarySearchTree {
 
   inOrder (fun) {
     if (typeof fun !== 'function') throw new Error('Argument must be a function')
-
     this.root.inOrder(fun)
+  }
+
+  preOrder (fun) {
+    if (typeof fun !== 'function') throw new Error('Argument must be a function')
+    this.root.preOrder(fun)
+  }
+
+  postOrder (fun) {
+    if (typeof fun !== 'function') throw new Error('Argument must be a function')
+    this.root.postOrder(fun)
   }
 
   levelOrder (fun, useRecursion = true) {
@@ -173,8 +182,19 @@ class BSTNode {
     return totalHeight
   }
 
+  postOrder (fun) {
+    this.left?.postOrder(fun)
+    this.right?.postOrder(fun)
+    fun(this)
+  }
+
+  preOrder (fun) {
+    fun(this)
+    this.left?.preOrder(fun)
+    this.right?.preOrder(fun)
+  }
+
   inOrder (fun) {
-    
     this.left?.inOrder(fun)
     fun(this)
     this.right?.inOrder(fun)
@@ -280,4 +300,4 @@ function generateRandomArray (size) {
 const array = generateRandomArray(10)
 const searchTree = new BinarySearchTree(array)
 searchTree.print()
-searchTree.inOrder((node) => console.log(node.data))
+searchTree.postOrder((node) => console.log(node.data))
