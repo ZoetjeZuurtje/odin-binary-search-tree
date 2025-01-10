@@ -174,9 +174,9 @@ class BSTNode {
   }
 
   inOrder (fun) {
-    fun(this)
-
+    
     this.left?.inOrder(fun)
+    fun(this)
     this.right?.inOrder(fun)
   }
 
@@ -270,8 +270,8 @@ function generateRandomArray (size) {
   const array = []
 
   for (let i = 0; i < size; i++) {
-    // const num = Math.floor(Math.random() * size)
-    const num = i
+    const num = Math.floor(Math.random() * 100)
+    // const num = i
     array.push(num)
   }
   return array
@@ -279,13 +279,5 @@ function generateRandomArray (size) {
 
 const array = generateRandomArray(10)
 const searchTree = new BinarySearchTree(array)
-// const node128 = searchTree.find(256)
-console.log(searchTree.isBalanced())
-
-searchTree.append(30)
-searchTree.append(40)
-searchTree.append(50)
-console.log(searchTree.isBalanced())
 searchTree.print()
-searchTree.rebalance()
-searchTree.print()
+searchTree.inOrder((node) => console.log(node.data))
