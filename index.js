@@ -55,7 +55,7 @@
 
 //   _append (place, node) {
 //     if (this[place] === null) {
-  //       this[place] = node
+//       this[place] = node
 //     } else {
 //       this[place].appendNode(node)
 //     }
@@ -71,19 +71,20 @@ class BinarySearchTree {
   find = (num) => this.root.find(num)
   append = (num) => this.root.append(num)
   delete = (num) => this.root.findAndDeleteNode(num)
-  
+
   levelOrder (fun, useRecursion = true) {
     if (typeof fun !== 'function') throw new Error('Argument must be a function')
-    
+
     if (useRecursion) {
       this._levelOrderRecursive(fun, [this.root])
     } else {
-      //this._levelOrderIterative(fun, [this.root])
+      this._levelOrderIterative(fun, [this.root])
     }
   }
 
-  _levelOrderRecursive(fun, queue) {
-    if (queue.length == 0) return
+  // traverses the tree using recursion
+  _levelOrderRecursive (fun, queue) {
+    if (queue.length === 0) return
 
     // Remove a node from the queue, and call the callback function
     const currentNode = queue.shift()
@@ -92,8 +93,21 @@ class BinarySearchTree {
     // Add the child nodes in order to the queue
     if (currentNode.left !== null) queue.push(currentNode.left)
     if (currentNode.right !== null) queue.push(currentNode.right)
-    
+
     this._levelOrder(fun, queue)
+  }
+
+  // traverses the tree using a `while` loop
+  _levelOrderIterative (fun, queue) {
+    while (queue.length !== 0) {
+      // Execute the function
+      const currentNode = queue.shift()
+      fun(currentNode)
+
+      // Add the child nodes in order to the queue
+      if (currentNode.left !== null) queue.push(currentNode.left)
+      if (currentNode.right !== null) queue.push(currentNode.right)
+    }
   }
 
   returnBinarySearchTree (sortedArray, start, end) {
@@ -207,5 +221,5 @@ function generateRandomArray (size) {
 const array = generateRandomArray(20)
 const searchTree = new BinarySearchTree(array)
 // const node128 = searchTree.find(256)
-searchTree.levelOrder((node) => console.log(node.data))
+searchTree.levelOrder((node) => console.log(node.data), false)
 searchTree.print()
